@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUANTIX</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="ambient-canvas" aria-hidden="true"></canvas>
+    <div class="architectural-grid" aria-hidden="true"></div>
+
+    <main id="main-menu" class="screen active">
+        <div class="surface-panel menu-panel">
+            <div class="brand-emblem">
+                <svg class="quantix-logo" viewBox="0 0 120 120" width="92" height="92" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="QUANTIX Logo">
+                    <defs>
+                        <linearGradient id="goldGrad" x1="18" y1="18" x2="102" y2="102" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#F6E6C2"/>
+                            <stop offset="52%" stop-color="#D6B36A"/>
+                            <stop offset="100%" stop-color="#9A7835"/>
+                        </linearGradient>
+                        <linearGradient id="subtleGrad" x1="20" y1="20" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="rgba(214, 179, 106, 0.35)"/>
+                            <stop offset="100%" stop-color="rgba(214, 179, 106, 0.05)"/>
+                        </linearGradient>
+                    </defs>
+                    <rect x="14" y="14" width="92" height="92" rx="24" stroke="url(#subtleGrad)" stroke-width="1"/>
+                    <line x1="60" y1="8" x2="60" y2="18" stroke="url(#goldGrad)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="60" y1="102" x2="60" y2="112" stroke="url(#goldGrad)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="8" y1="60" x2="18" y2="60" stroke="url(#goldGrad)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="102" y1="60" x2="112" y2="60" stroke="url(#goldGrad)" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M85 60C85 73.8071 73.8071 85 60 85C46.1929 85 35 73.8071 35 60C35 46.1929 46.1929 35 60 35C70.77 35 79.95 41.81 83.48 51.35" stroke="url(#goldGrad)" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M75.5 60C75.5 68.5604 68.5604 75.5 60 75.5C51.4396 75.5 44.5 68.5604 44.5 60C44.5 51.4396 51.4396 44.5 60 44.5" stroke="rgba(246, 230, 194, 0.45)" stroke-width="1.6" stroke-linecap="round"/>
+                    <line x1="68" y1="68" x2="89" y2="89" stroke="url(#goldGrad)" stroke-width="4.2" stroke-linecap="round"/>
+                    <line x1="53" y1="60" x2="67" y2="60" stroke="rgba(214, 179, 106, 0.55)" stroke-width="1.4"/>
+                    <polygon points="53,56 57,60 53,64 49,60" fill="#F6E6C2"/>
+                    <polygon points="67,56 71,60 67,64 63,60" fill="#D6B36A"/>
+                </svg>
+            </div>
+
+            <div class="menu-header">
+                <h1>QUANTIX</h1>
+                <p class="subtitle">COGNITIVE ARITHMETIC ENGINE</p>
+            </div>
+
+            <div class="quick-diff-wrapper">
+                <span class="quick-diff-label">DIFFICULTY MATRIX</span>
+                <div class="diff-pills" role="group" aria-label="Select Difficulty">
+                    <button type="button" class="pill-btn" data-diff="easy">Easy</button>
+                    <button type="button" class="pill-btn" data-diff="medium">Medium</button>
+                    <button type="button" class="pill-btn" data-diff="hard">Hard</button>
+                    <button type="button" class="pill-btn" data-diff="expert">Expert</button>
+                    <button type="button" class="pill-btn active" data-diff="mixed">Mixed</button>
+                </div>
+            </div>
+
+            <div class="menu-buttons">
+                <button id="btn-start" class="btn primary">
+                    <span>INITIALIZE SESSION</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                        <path d="M5 12h14M13 5l7 7-7 7"/>
+                    </svg>
+                </button>
+                <div class="secondary-row">
+                    <button id="btn-how-to" class="btn secondary">RULES & NOTATION</button>
+                    <button id="btn-settings" class="btn secondary">PREFERENCES</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <section id="game-screen" class="screen hidden">
+        <header class="game-header surface-panel">
+            <div class="header-top">
+                <div class="header-brand">
+                    <svg class="header-logo-icon" viewBox="26 26 72 72" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M85 60C85 73.8071 73.8071 85 60 85C46.1929 85 35 73.8071 35 60C35 46.1929 46.1929 35 60 35C70.77 35 79.95 41.81 83.48 51.35" stroke="#D6B36A" stroke-width="6.5" stroke-linecap="round"/>
+                        <line x1="68" y1="68" x2="91" y2="91" stroke="#D6B36A" stroke-width="6.5" stroke-linecap="round"/>
+                    </svg>
+                    <div class="brand-meta">
+                        <span class="brand-name">QUANTIX</span>
+                        <span class="diff-tag" id="diff-badge-display">MIXED</span>
+                    </div>
+                </div>
+
+                <div class="stats-cluster">
+                    <div class="stat-box">
+                        <span class="label">SCORE</span>
+                        <span id="score-display" class="value">0</span>
+                        <div id="combo-display" class="combo-badge hidden">COMBO ×2</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-box">
+                        <span class="label">MOVES</span>
+                        <span id="moves-display" class="value">0</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-box">
+                        <span class="label">SOLVED</span>
+                        <span id="matches-display" class="value">0 / 12</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-box">
+                        <span class="label">ELAPSED</span>
+                        <span id="time-display" class="value">00:00</span>
+                    </div>
+                </div>
+
+                <div class="header-actions">
+                    <button id="btn-quit" class="btn danger btn-small">ABORT</button>
+                </div>
+            </div>
+
+            <div class="progress-track">
+                <div id="progress-bar" class="progress-fill"></div>
+            </div>
+        </header>
+
+        <div class="board-container">
+            <div id="game-board" class="grid-board"></div>
+        </div>
+    </section>
+
+    <div id="modal-how-to" class="modal hidden" role="dialog" aria-modal="true">
+        <div class="surface-panel modal-content">
+            <div class="modal-header">
+                <span class="modal-kicker">PROTOCOL</span>
+                <h2>HOW TO PLAY</h2>
+            </div>
+            <div class="rules">
+                <div class="rule-item">
+                    <span class="rule-num">01</span>
+                    <p>Select a closed matrix tile to reveal its mathematical expression.</p>
+                </div>
+                <div class="rule-item">
+                    <span class="rule-num">02</span>
+                    <p>Flip a second tile and evaluate both expressions mentally.</p>
+                </div>
+                <div class="rule-item">
+                    <span class="rule-num">03</span>
+                    <p>Match two <strong>different expressions</strong> that yield the <strong>exact same value</strong>.</p>
+                </div>
+
+                <div class="example-box">
+                    <span class="example-label">EQUIVALENCE EXAMPLE</span>
+                    <div class="cards-example">
+                        <div class="mini-card">18 × 4 − 24 <span>= 48</span></div>
+                        <div class="eq-symbol">≡</div>
+                        <div class="mini-card">132 ÷ 4 + 15 <span>= 48</span></div>
+                    </div>
+                    <p class="notation-note">Standard operator precedence applies (× and ÷ before + and −). Powers such as <strong>7²</strong> equal <strong>49</strong>.</p>
+                </div>
+            </div>
+            <button class="btn primary btn-close-modal full-width">ACKNOWLEDGE</button>
+        </div>
+    </div>
+
+    <div id="modal-settings" class="modal hidden" role="dialog" aria-modal="true">
+        <div class="surface-panel modal-content">
+            <div class="modal-header">
+                <span class="modal-kicker">SYSTEM</span>
+                <h2>PREFERENCES</h2>
+            </div>
+            <div class="settings-list">
+                <div class="settings-group">
+                    <div class="setting-info">
+                        <label for="diff-select">Difficulty Tier</label>
+                        <span>Controls expression complexity</span>
+                    </div>
+                    <select id="diff-select">
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                        <option value="expert">Expert</option>
+                        <option value="mixed" selected>Mixed</option>
+                    </select>
+                </div>
+                <div class="settings-group">
+                    <div class="setting-info">
+                        <label>Acoustic Feedback</label>
+                        <span>Synthesized tactile audio</span>
+                    </div>
+                    <button id="toggle-sound" type="button" class="btn toggle-btn active">ON</button>
+                </div>
+                <div class="settings-group">
+                    <div class="setting-info">
+                        <label>Kinetic Motion</label>
+                        <span>Ambient field & 3D card tilt</span>
+                    </div>
+                    <button id="toggle-anim" type="button" class="btn toggle-btn active">ON</button>
+                </div>
+            </div>
+            <button class="btn primary btn-close-modal full-width">APPLY & CLOSE</button>
+        </div>
+    </div>
+
+    <div id="modal-abort" class="modal hidden" role="dialog" aria-modal="true">
+        <div class="surface-panel modal-content confirm-panel">
+            <div class="modal-header">
+                <span class="modal-kicker danger-kicker">INTERRUPT</span>
+                <h2>ABORT SESSION?</h2>
+            </div>
+            <p class="confirm-text">Your current matrix progress, elapsed time, and accumulated score will be discarded.</p>
+            <div class="confirm-actions">
+                <button id="btn-cancel-abort" class="btn secondary">RESUME</button>
+                <button id="btn-confirm-abort" class="btn danger">CONFIRM ABORT</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-win" class="modal hidden" role="dialog" aria-modal="true">
+        <div class="surface-panel modal-content win-panel">
+            <div class="win-emblem">
+                <svg viewBox="0 0 64 64" width="52" height="52" fill="none">
+                    <circle cx="32" cy="32" r="28" stroke="#D6B36A" stroke-width="1.8" stroke-dasharray="4 4"/>
+                    <path d="M20 33L28 41L45 24" stroke="#3ECF8E" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h2 class="win-title"><span class="gold-gradient-text">MATRIX SOLVED</span></h2>
+            <p class="win-subtitle">All 12 arithmetic equivalences verified.</p>
+
+            <div class="final-stats">
+                <div class="f-stat">
+                    <span class="f-label">FINAL SCORE</span>
+                    <span id="final-score" class="f-val">0</span>
+                </div>
+                <div class="f-stat">
+                    <span class="f-label">MOVES</span>
+                    <span id="final-moves" class="f-val">0</span>
+                </div>
+                <div class="f-stat">
+                    <span class="f-label">TIME</span>
+                    <span id="final-time" class="f-val">00:00</span>
+                </div>
+                <div class="f-stat">
+                    <span class="f-label">ACCURACY</span>
+                    <span id="final-accuracy" class="f-val">100%</span>
+                </div>
+            </div>
+
+            <div class="menu-buttons">
+                <button id="btn-play-again" class="btn primary">NEW MATRIX</button>
+                <button id="btn-home" class="btn secondary">RETURN TO MENU</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
